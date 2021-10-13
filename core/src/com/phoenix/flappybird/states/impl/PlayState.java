@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.phoenix.flappybird.config.ApplicationConfig;
 import com.phoenix.flappybird.sprites.Bird;
+import com.phoenix.flappybird.sprites.Score;
 import com.phoenix.flappybird.sprites.Tube;
 import com.phoenix.flappybird.states.GameStateManager;
 import com.phoenix.flappybird.states.State;
@@ -20,6 +21,7 @@ public class PlayState extends State {
     private static final int GROUND_Y_OFFSET = -30;
 
     private Bird bird;
+    private Score scoreSprite;
 
     private Texture background;
     private Texture ground;
@@ -28,6 +30,7 @@ public class PlayState extends State {
     private Vector2 positionGround1, positionGround2;
 
     private Array<Tube> tubes;
+
 
     private boolean gameover;
     private boolean enableUpdateScore;
@@ -53,6 +56,8 @@ public class PlayState extends State {
         this.font = new BitmapFont();
         enableUpdateScore = true;
 
+        scoreSprite = new Score();
+
         //noinspection IntegerDivisionInFloatingPointContext
         camera.setToOrtho(false, ApplicationConfig.WIDTH / 2, ApplicationConfig.HEIGHT / 2);
     }
@@ -72,6 +77,7 @@ public class PlayState extends State {
         handleInput();
         updateGround();
         bird.update(delta);
+
         camera.position.x = bird.getPosition().x + 80;
 
         for (Tube tube : tubes) {
@@ -83,6 +89,7 @@ public class PlayState extends State {
 
             if (bird.getPosition().x > tube.getPositionTopTube().x + tube.getTopTube().getWidth() && enableUpdateScore) {
                 score++;
+                scoreSprite.update(score);
                 enableUpdateScore = false;
             }
 
@@ -107,24 +114,33 @@ public class PlayState extends State {
 
         spriteBatch.begin();
 
+        // Background
         spriteBatch.draw(this.background, camera.position.x - (camera.viewportWidth / 2), 0);
+
+        // Bird
         spriteBatch.draw(bird.getBirdTexture(), bird.getPosition().x, bird.getPosition().y);
 
+        // Tube
         for (Tube tube : tubes) {
             spriteBatch.draw(tube.getTopTube(), tube.getPositionTopTube().x, tube.getPositionTopTube().y);
             spriteBatch.draw(tube.getBottomTube(), tube.getPositionBottomTube().x, tube.getPositionBottomTube().y);
         }
 
+        // Ground
         spriteBatch.draw(ground, positionGround1.x, positionGround1.y);
         spriteBatch.draw(ground, positionGround2.x, positionGround2.y);
 
-        font.draw(spriteBatch, String.valueOf(score), camera.position.x, 50);
+//        font.draw(spriteBatch, String.valueOf(score), camera.position.x, 50);
 
+        // Nếu game over
         if (gameover) {
             //noinspection IntegerDivisionInFloatingPointContext
             spriteBatch.draw(gameoverImg, camera.position.x - gameoverImg.getWidth() / 2, camera.position.y);
-
         }
+
+        spriteBatch.draw(scoreSprite.getScoreTextures()[0], camera.position.x - scoreSprite.getScoreTextures()[0].getWidth(), 20);
+        spriteBatch.draw(scoreSprite.getScoreTextures()[1], camera.position.x , 20);
+
         spriteBatch.end();
     }
 
@@ -139,7 +155,6 @@ public class PlayState extends State {
 
         ground.dispose();
 
-        System.out.println("Play state is disposed");
     }
 
     private void updateGround() {

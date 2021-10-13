@@ -16,7 +16,6 @@ public class Bird extends Sprite {
 
     private Texture birdTexture;
     private Animation birdAnimation;
-    private float rotation = 15f;
 
     private boolean colliding;
 
@@ -24,11 +23,12 @@ public class Bird extends Sprite {
         position = new Vector3(x, y, 0);
         velocity = new Vector3(0, 0, 0);
         birdTexture = new Texture("birdanimation.png");
-        birdAnimation = new Animation(new TextureRegion(birdTexture), 3, 0.5f);
+        birdAnimation = new Animation(new TextureRegion(birdTexture), 3, 0.3f);
         //noinspection IntegerDivisionInFloatingPointContext
-        bounds = new Rectangle(x, y, birdTexture.getWidth()/3, birdTexture.getHeight());
+        bounds = new Rectangle(x, y, birdTexture.getWidth() / 3, birdTexture.getHeight());
 
         colliding = false;
+
     }
 
     public void update(float delta) {
@@ -38,8 +38,11 @@ public class Bird extends Sprite {
         }
         velocity.scl(delta);
 
-        if (!colliding)
+        if (colliding) {
+            position.add(0, velocity.y, 0);
+        }else {
             position.add(MOVEMENT * delta, velocity.y, 0);
+        }
 
         if (position.y < 82) {
             position.y = 82;
@@ -68,10 +71,6 @@ public class Bird extends Sprite {
 
     public TextureRegion getBirdTexture() {
         return birdAnimation.getFrame();
-    }
-
-    public boolean isColliding() {
-        return colliding;
     }
 
     public void setColliding(boolean colliding) {

@@ -16,7 +16,7 @@ public class FlappyBird extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         gameStateManager = new DefaultGameStateManager();
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0.9f, 0.9f, 0.6f, 1);
 
         gameStateManager.push(new MenuState(gameStateManager));
     }
