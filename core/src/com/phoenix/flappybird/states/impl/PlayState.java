@@ -30,6 +30,7 @@ public class PlayState extends State {
     private Array<Tube> tubes;
 
     private boolean gameover;
+    private boolean enableUpdateScore;
     private int score = 0;
     private BitmapFont font;
 
@@ -50,6 +51,7 @@ public class PlayState extends State {
         }
 
         this.font = new BitmapFont();
+        enableUpdateScore = true;
 
         //noinspection IntegerDivisionInFloatingPointContext
         camera.setToOrtho(false, ApplicationConfig.WIDTH / 2, ApplicationConfig.HEIGHT / 2);
@@ -76,10 +78,12 @@ public class PlayState extends State {
             // Khi mà vượt qua đc 1 tube thì reposition lại tube
             if (camera.position.x - camera.viewportWidth / 2 > tube.getPositionTopTube().x + tube.getTopTube().getWidth()) {
                 tube.reposition(tube.getPositionTopTube().x + ((Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT));
+                enableUpdateScore = true;
             }
 
-            if(bird.getPosition().x == tube.getPositionTopTube().x + tube.getTopTube().getWidth()){
+            if (bird.getPosition().x > tube.getPositionTopTube().x + tube.getTopTube().getWidth() && enableUpdateScore) {
                 score++;
+                enableUpdateScore = false;
             }
 
             // Kiểm tra nếu có va chạm
@@ -114,7 +118,7 @@ public class PlayState extends State {
         spriteBatch.draw(ground, positionGround1.x, positionGround1.y);
         spriteBatch.draw(ground, positionGround2.x, positionGround2.y);
 
-        font.draw(spriteBatch, String.valueOf(score), camera.position.x, 60);
+        font.draw(spriteBatch, String.valueOf(score), camera.position.x, 50);
 
         if (gameover) {
             //noinspection IntegerDivisionInFloatingPointContext

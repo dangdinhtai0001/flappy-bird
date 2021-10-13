@@ -1,36 +1,44 @@
 package com.phoenix.flappybird.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
 public class Bird extends Sprite {
     private static final int GRAVITY = -15;
     private static final int MOVEMENT = 100;
+    private static final int JUMP = 250;
+
     private Vector3 position;
     private Vector3 velocity;
     private Rectangle bounds;
 
     private Texture birdTexture;
+    private Animation birdAnimation;
+    private float rotation = 15f;
 
     private boolean colliding;
 
     public Bird(int x, int y) {
         position = new Vector3(x, y, 0);
         velocity = new Vector3(0, 0, 0);
-        birdTexture = new Texture("bird.png");
-        bounds = new Rectangle(x, y, birdTexture.getWidth(), birdTexture.getHeight());
+        birdTexture = new Texture("birdanimation.png");
+        birdAnimation = new Animation(new TextureRegion(birdTexture), 3, 0.5f);
+        //noinspection IntegerDivisionInFloatingPointContext
+        bounds = new Rectangle(x, y, birdTexture.getWidth()/3, birdTexture.getHeight());
 
         colliding = false;
     }
 
     public void update(float delta) {
+        birdAnimation.update(delta);
         if (position.y > 0) {
             velocity.add(0, GRAVITY, 0);
         }
         velocity.scl(delta);
 
-        if(!colliding)
+        if (!colliding)
             position.add(MOVEMENT * delta, velocity.y, 0);
 
         if (position.y < 82) {
@@ -42,7 +50,7 @@ public class Bird extends Sprite {
     }
 
     public void jump() {
-        velocity.y = 250;
+        velocity.y = JUMP;
     }
 
     @Override
@@ -58,8 +66,8 @@ public class Bird extends Sprite {
         return position;
     }
 
-    public Texture getBirdTexture() {
-        return birdTexture;
+    public TextureRegion getBirdTexture() {
+        return birdAnimation.getFrame();
     }
 
     public boolean isColliding() {
