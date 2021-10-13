@@ -7,7 +7,7 @@ import com.phoenix.flappybird.states.State;
 import java.util.Stack;
 
 public class DefaultGameStateManager implements GameStateManager {
-    private Stack<State> states;
+    private final Stack<State> states;
 
     public DefaultGameStateManager(Stack<State> states) {
         this.states = states;

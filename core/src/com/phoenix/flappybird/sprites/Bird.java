@@ -9,6 +9,9 @@ public class Bird extends Sprite {
     private static final int GRAVITY = -15;
     private static final int MOVEMENT = 100;
     private static final int JUMP = 250;
+    private static final float DEFAULT_ROTATION = 90f;
+    private static final float JUMP_ROTATION = 125f;
+    private static final float FALLING_ROTATION = 45f;
 
     private Vector3 position;
     private Vector3 velocity;
@@ -28,11 +31,11 @@ public class Bird extends Sprite {
         bounds = new Rectangle(x, y, birdTexture.getWidth() / 3, birdTexture.getHeight());
 
         colliding = false;
-
     }
 
     public void update(float delta) {
         birdAnimation.update(delta);
+
         if (position.y > 0) {
             velocity.add(0, GRAVITY, 0);
         }
@@ -40,7 +43,7 @@ public class Bird extends Sprite {
 
         if (colliding) {
             position.add(0, velocity.y, 0);
-        }else {
+        } else {
             position.add(MOVEMENT * delta, velocity.y, 0);
         }
 
@@ -76,4 +79,6 @@ public class Bird extends Sprite {
     public void setColliding(boolean colliding) {
         this.colliding = colliding;
     }
+
+
 }

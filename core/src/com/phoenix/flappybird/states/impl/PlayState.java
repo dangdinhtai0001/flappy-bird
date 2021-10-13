@@ -117,14 +117,14 @@ public class PlayState extends State {
         // Background
         spriteBatch.draw(this.background, camera.position.x - (camera.viewportWidth / 2), 0);
 
-        // Bird
-        spriteBatch.draw(bird.getBirdTexture(), bird.getPosition().x, bird.getPosition().y);
-
         // Tube
         for (Tube tube : tubes) {
             spriteBatch.draw(tube.getTopTube(), tube.getPositionTopTube().x, tube.getPositionTopTube().y);
             spriteBatch.draw(tube.getBottomTube(), tube.getPositionBottomTube().x, tube.getPositionBottomTube().y);
         }
+
+        // Bird
+        spriteBatch.draw(bird.getBirdTexture(), bird.getPosition().x, bird.getPosition().y);
 
         // Ground
         spriteBatch.draw(ground, positionGround1.x, positionGround1.y);
@@ -139,7 +139,7 @@ public class PlayState extends State {
         }
 
         spriteBatch.draw(scoreSprite.getScoreTextures()[0], camera.position.x - scoreSprite.getScoreTextures()[0].getWidth(), 20);
-        spriteBatch.draw(scoreSprite.getScoreTextures()[1], camera.position.x , 20);
+        spriteBatch.draw(scoreSprite.getScoreTextures()[1], camera.position.x, 20);
 
         spriteBatch.end();
     }
